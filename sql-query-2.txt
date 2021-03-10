@@ -93,6 +93,14 @@ Group by
 
 Join
 ●    Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+
+      SELECT COUNT(prenotazioni_has_ospiti.prenotazione_id) as "prenotazioni", prenotazioni_has_ospiti.ospite_id, ospiti.lastname, ospiti.name
+      FROM prenotazioni_has_ospiti
+      INNER JOIN ospiti
+      ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+      GROUP BY prenotazioni_has_ospiti.ospite_id
+      HAVING prenotazioni > 2;
+
 ●    Stampare tutti gli ospiti per ogni prenotazione
 
       SELECT *
@@ -122,4 +130,19 @@ Join
       WHERE stanze.floor = 1;
 
 ●    Prendi i dati di fatturazione per la prenotazione con id=7
+
+      SELECT *
+      FROM prenotazioni
+      JOIN pagamenti
+      ON prenotazioni.id = pagamenti.prenotazione_id
+      JOIN paganti
+      ON pagamenti.pagante_id = paganti.id
+      WHERE prenotazioni.id = 7;
+
 ●    Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+      SELECT *
+      FROM  prenotazioni
+      RIGHT JOIN stanze
+      ON stanze.id = prenotazioni.stanza_id
+      WHERE prenotazioni.id IS NULL;
